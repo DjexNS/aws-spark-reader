@@ -2,7 +2,7 @@ name := "aws-spark-reader"
 
 version := "0.1"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.15"
 
 
 resolvers ++= Seq(
@@ -12,8 +12,8 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= {
-  val sparkVer = "2.4.6"
-  val hadoopVer = "2.7.3"
+  val sparkVer = "2.4.8"
+  val hadoopVer = "2.10.1"
   Seq(
     "org.apache.spark" %% "spark-core" % sparkVer % Provided,
     "org.apache.spark" %% "spark-sql" % sparkVer,
@@ -21,14 +21,16 @@ libraryDependencies ++= {
     "org.apache.hadoop" % "hadoop-common" % hadoopVer,
     "org.apache.hadoop" % "hadoop-aws" % hadoopVer,
     "commons-httpclient" % "commons-httpclient" % "3.1",
-    "commons-io" % "commons-io" % "2.6",
-    "com.amazonaws" % "aws-java-sdk" % "1.7.4",
-    "com.google.guava" % "guava" % "23.6-jre",
-    "com.typesafe" % "config" % "1.3.2"
+    "commons-io" % "commons-io" % "2.11.0",
+    "com.amazonaws" % "aws-java-sdk" % "1.12.81" excludeAll(
+      ExclusionRule(organization = "com.fasterxml.jackson.core")
+    ),
+    "com.google.guava" % "guava" % "31.0.1-jre",
+    "com.typesafe" % "config" % "1.4.1"
   )
 }
 
-assemblyJarName in assembly := "aws-spark-reader"
+assemblyJarName in assembly := "aws-spark-reader.jar"
 mainClass in assembly := Some("com.djex.Application")
 
 assemblyShadeRules in assembly := Seq(
