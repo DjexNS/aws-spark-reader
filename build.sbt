@@ -2,7 +2,7 @@ name := "aws-spark-reader"
 
 version := "0.1"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.13.8"
 
 
 resolvers ++= Seq(
@@ -12,8 +12,8 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= {
-  val sparkVer = "2.4.6"
-  val hadoopVer = "2.7.3"
+  val sparkVer = "3.3.0"
+  val hadoopVer = "3.3.3"
   Seq(
     "org.apache.spark" %% "spark-core" % sparkVer % Provided,
     "org.apache.spark" %% "spark-sql" % sparkVer,
@@ -21,32 +21,32 @@ libraryDependencies ++= {
     "org.apache.hadoop" % "hadoop-common" % hadoopVer,
     "org.apache.hadoop" % "hadoop-aws" % hadoopVer,
     "commons-httpclient" % "commons-httpclient" % "3.1",
-    "commons-io" % "commons-io" % "2.6",
-    "com.amazonaws" % "aws-java-sdk" % "1.7.4",
-    "com.google.guava" % "guava" % "23.6-jre",
-    "com.typesafe" % "config" % "1.3.2"
+    "commons-io" % "commons-io" % "2.11.0",
+    "com.amazonaws" % "aws-java-sdk" % "1.12.273",
+    "com.google.guava" % "guava" % "31.1-jre",
+    "com.typesafe" % "config" % "1.4.2"
   )
 }
 
-assemblyJarName in assembly := "aws-spark-reader"
-mainClass in assembly := Some("com.djex.Application")
+assembly / assemblyJarName := "aws-spark-reader"
+assembly / mainClass := Some("com.djex.Application")
 
-assemblyShadeRules in assembly := Seq(
+assembly / assemblyShadeRules := Seq(
   ShadeRule.rename("com.google.**" -> "shadeio.@1").inAll
 )
 
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
   case m if m.toLowerCase.endsWith("manifest.mf") => MergeStrategy.discard
   case m if m.startsWith("META-INF") => MergeStrategy.discard
   case PathList("org", "apache", xs@_*) => MergeStrategy.first
   case _ => MergeStrategy.first
 }
 
-fork in run := true
-javaOptions in run ++= Seq(
+run / fork := true
+run / javaOptions ++= Seq(
   "-Dlog4j.debug=true",
   "-Dlog4j.configuration=log4j.properties")
 outputStrategy := Some(StdoutOutput)
 
-fork in Test := true
-parallelExecution in Test := false
+Test / fork := true
+Test / parallelExecution := false
