@@ -1,6 +1,10 @@
 package com.djex
 
 import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.sedona.sql.utils.SedonaSQLRegistrator
+import org.apache.spark.serializer.KryoSerializer
+import org.apache.sedona.viz.core.Serde.SedonaVizKryoRegistrator
+import org.apache.sedona.viz.sql.utils.SedonaVizRegistrator
 import org.apache.spark.sql.SparkSession
 
 object Application {
@@ -9,23 +13,26 @@ object Application {
   val sparkCores: String = configSpark.getString("master")
 
   lazy val spark: SparkSession = {
-    SparkSession.builder().config("spark.speculation","false").master(s"$sparkCores").appName("AwsSparkReader").getOrCreate()
+    SparkSession.builder()
+      .config("spark.speculation","false")
+      .master(s"$sparkCores")
+      .appName("AwsSparkReader")
+      .config("spark.serializer", classOf[KryoSerializer].getName)
+      .config("spark.kryo.registrator", classOf[SedonaVizKryoRegistrator].getName)
+      .getOrCreate()
   }
 
-  def main(args: Array[String]): Unit = {
+  SedonaSQLRegistrator.registerAll(spark)
+  SedonaVizRegistrator.registerAll(spark)
 
+  def main(args: Array[String]): Unit = {
     val initialDataframe = spark
       .read
       .option("header", true)
-      .csv(s"s3a://dejan-dekic-test-us-east-1/dataset=data_listings/2021/08/totalListing/part-00000-tid-5332801278252446004-e9724cd7-6ccf-482a-b7d9-2c9d6add9c86-62193-1-c000.csv.gz")
+      .text(s"file:///home/djex/workspace/functor/scala-spark-s3-reader/src/main/resources/testpoint.csv")
 
     initialDataframe
       .show(1000, false)
-
-//    println("First SparkContext:")
-//    println("APP Name :" + spark.sparkContext.appName)
-//    println("Deploy Mode :" + spark.sparkContext.deployMode)
-//    println("Master :" + spark.sparkContext.master)
 
   }
 
