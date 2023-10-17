@@ -1,6 +1,6 @@
 
 # spark-aws-reader
-A simple Scala Spark application, with the proper dependencies for Scala 2.13.8 and Spark 3.3.0, that reads from AWS S3 buckets.
+A simple Scala Spark application, with the proper dependencies for Scala 2.13.12, Spark 3.5.0 and Hadoop 3.3.6, that reads from AWS S3 buckets.
 
 -------------------------------------------
 ### Running the job 

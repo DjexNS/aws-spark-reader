@@ -2,7 +2,7 @@ name := "aws-spark-reader"
 
 version := "0.1"
 
-scalaVersion := "2.13.8"
+scalaVersion := "2.13.12"
 
 
 resolvers ++= Seq(
@@ -12,8 +12,8 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= {
-  val sparkVer = "3.3.0"
-  val hadoopVer = "3.3.3"
+  val sparkVer = "3.5.0"
+  val hadoopVer = "3.3.6"
   Seq(
     "org.apache.spark" %% "spark-core" % sparkVer % Provided,
     "org.apache.spark" %% "spark-sql" % sparkVer,
@@ -28,7 +28,7 @@ libraryDependencies ++= {
   )
 }
 
-assembly / assemblyJarName := "aws-spark-reader"
+assembly / assemblyJarName := "aws-spark-reader.jar"
 assembly / mainClass := Some("com.djex.Application")
 
 assembly / assemblyShadeRules := Seq(
